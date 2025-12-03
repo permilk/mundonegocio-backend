@@ -187,11 +187,12 @@ async def root(request: Request):
     }
 
 # Incluir routers
-app.include_router(health.router, prefix="/health", tags=["Health"])
+# Health router SIN prefix para que /health funcione
+app.include_router(health.router, tags=["Health"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
-app.include_router(sales.router, prefix="/api/sales", tags=["Sales"])
-app.include_router(filters.router, prefix="/api/filters", tags=["Filters"])
-app.include_router(exports.router, prefix="/api/exports", tags=["Exports"])
+app.include_router(sales.router, tags=["Sales"])
+app.include_router(filters.router, tags=["Filters"])
+app.include_router(exports.router, tags=["Exports"])
 
 # Entry Point
 if __name__ == "__main__":

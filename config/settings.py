@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     app_version: str = "6.0.0"
     debug: bool = False
     environment: str = "production"
+    log_level: str = "INFO"
     
     # Database
     database_url: str = Field(default="postgresql://localhost/mundonegocio")

@@ -12,16 +12,30 @@ from typing import Optional
 import structlog
 
 from config.settings import get_settings
-from models.user import User, UserInDB, TokenResponse, UserRole
 
 settings = get_settings()
 logger = structlog.get_logger()
 
-router = APIRouter()
+router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 security = HTTPBearer()
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Modelos inline
+class User(BaseModel):
+    id: int
+    email: EmailStr
+    full_name: str
+    is_active: bool = True
+    
+class UserInDB(User):
+    hashed_password: str
+    
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
 
 # Modelos
 class LoginRequest(BaseModel):

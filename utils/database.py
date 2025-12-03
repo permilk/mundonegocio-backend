@@ -5,8 +5,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import structlog
+from config.settings import get_settings
 
 logger = structlog.get_logger()
+settings = get_settings()
 
 # Database engine (se inicializa en init_db)
 engine = None
@@ -14,7 +16,7 @@ SessionLocal = None
 Base = declarative_base()
 
 
-async def init_db(database_url: str):
+async def init_db():
     """
     Initialize database connection
     """
@@ -22,7 +24,7 @@ async def init_db(database_url: str):
     
     try:
         engine = create_engine(
-            database_url,
+            settings.database_url,
             pool_pre_ping=True,
             pool_size=10,
             max_overflow=20
@@ -34,7 +36,7 @@ async def init_db(database_url: str):
             bind=engine
         )
         
-        logger.info("database_connected", url=database_url.split("@")[-1])
+        logger.info("database_connected", url=settings.database_url.split("@")[-1] if "@" in settings.database_url else "local")
         
     except Exception as e:
         logger.error("database_connection_failed", error=str(e))
