@@ -10,11 +10,19 @@ from fastapi.exceptions import RequestValidationError
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from prometheus_fastapi_instrumentator import Instrumentator
 import logging
 import sys
 from datetime import datetime
 import structlog
+
+# Prometheus opcional
+try:
+    from prometheus_fastapi_instrumentator import Instrumentator
+    PROMETHEUS_AVAILABLE = True
+except ImportError:
+    PROMETHEUS_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Prometheus not available, metrics disabled")
 
 from config.settings import get_settings
 from api.routes import auth, sales, filters, exports, health
@@ -89,9 +97,12 @@ app.middleware("http")(error_handler_middleware)
 # 5. Authentication (para rutas protegidas)
 # app.middleware("http")(AuthMiddleware())  # Se activa selectivamente por ruta
 
-# Prometheus Metrics
-if not settings.debug:
+# Prometheus Metrics (opcional)
+if PROMETHEUS_AVAILABLE and not settings.debug:
     Instrumentator().instrument(app).expose(app, endpoint="/metrics")
+    logger.info("prometheus_metrics_enabled")
+elif not PROMETHEUS_AVAILABLE:
+    logger.warning("prometheus_metrics_disabled", reason="module_not_available")
 
 # Event Handlers
 @app.on_event("startup")

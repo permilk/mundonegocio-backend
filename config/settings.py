@@ -11,25 +11,25 @@ class Settings(BaseSettings):
     """Settings de la aplicación"""
     
     # App
-    APP_NAME: str = "Mundo Negocio Dashboard API"
-    APP_VERSION: str = "6.0.0"
-    DEBUG: bool = False
-    ENVIRONMENT: str = "production"
+    app_name: str = "Mundo Negocio Dashboard API"
+    app_version: str = "6.0.0"
+    debug: bool = False
+    environment: str = "production"
     
     # Database
-    DATABASE_URL: str = Field(default="postgresql://localhost/mundonegocio")
+    database_url: str = Field(default="postgresql://localhost/mundonegocio")
     
     # Redis
-    REDIS_URL: str = Field(default="redis://localhost:6379")
+    redis_url: str = Field(default="redis://localhost:6379")
     
     # JWT
-    JWT_SECRET_KEY: str = Field(default="change-this-to-a-secure-secret-key-min-32-chars")
-    JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    jwt_secret_key: str = Field(default="change-this-to-a-secure-secret-key-min-32-chars")
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 7
     
     # CORS
-    CORS_ORIGINS: List[str] = Field(
+    cors_origins: List[str] = Field(
         default=[
             "http://localhost:3000",
             "http://localhost:3001",
@@ -39,14 +39,14 @@ class Settings(BaseSettings):
     )
     
     # Rate Limiting
-    RATE_LIMIT_PER_MINUTE: int = 60
+    rate_limit_per_minute: int = 60
     
     # Cache
-    CACHE_TTL_SECONDS: int = 300
+    cache_ttl_seconds: int = 300
     
     class Config:
         env_file = ".env"
-        case_sensitive = True
+        case_sensitive = False
 
 
 @lru_cache()
