@@ -16,7 +16,7 @@ import sys
 from datetime import datetime
 import structlog
 
-from config.settings import get_settings
+from api.settings import get_settings
 from api.routes import sales, auth, filters, exports, health
 from middleware.auth import AuthMiddleware
 from middleware.logging import LoggingMiddleware
