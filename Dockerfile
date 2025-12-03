@@ -35,5 +35,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio (Railway usa $PORT)
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Comando de inicio - Usar sh -c para expandir variables
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
